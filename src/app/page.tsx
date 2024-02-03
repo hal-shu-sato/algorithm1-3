@@ -1,96 +1,55 @@
-import Image from 'next/image';
+import { readFile } from 'fs/promises';
 
-import styles from './page.module.css';
+import { Container, Row } from 'react-bootstrap';
 
-export default function Home() {
+import Main from './main';
+
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead.bs5.css';
+
+async function getStations() {
+  const stationsTxt = await readFile('109files/stations.txt', 'utf8');
+  return stationsTxt
+    .trim()
+    .split(/\r\n|\n|\r/)
+    .map((line) => {
+      const [id, stationName] = line.trim().split(' ');
+      return { id: Number(id) - 1, name: stationName };
+    });
+}
+
+async function getAdjList() {
+  const stationsTxt = await readFile('109files/adjList.txt', 'utf8');
+  const lines = stationsTxt.trim().split(/\r\n|\n|\r/);
+  const adjList = lines.map((line) => {
+    const adj = line.trim().split(' ').slice(1);
+    return adj.map((s) => {
+      const [v, w] = s.split(',').slice(0, 2).map(Number);
+      return { to: v - 1, time: w };
+    });
+  });
+  return adjList;
+}
+
+export default async function Home() {
+  const stations = await getStations();
+  const adjList = await getAdjList();
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <Container as="main">
+      <Main stations={stations} adjList={adjList} />
+      <Row>
+        {stations.map((station) => {
+          return (
+            <div key={station.id}>
+              {station.name}{' '}
+              {adjList[station.id]
+                ?.map(({ to, time }) => stations[to]?.name + ': ' + time)
+                .join(', ')}
+            </div>
+          );
+        })}
+      </Row>
+    </Container>
   );
 }
