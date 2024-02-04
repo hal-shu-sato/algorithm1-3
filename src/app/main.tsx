@@ -2,7 +2,14 @@
 
 import { useCallback, useState } from 'react';
 
-import { Col, Form, Row, type FormGroupProps, Button } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  Form,
+  ListGroup,
+  Row,
+  type FormGroupProps,
+} from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { type Option } from 'react-bootstrap-typeahead/types/types';
 
@@ -69,7 +76,7 @@ export default function Main({
   }, [adjList, origin, destination]);
 
   return (
-    <Row>
+    <Row className="my-2">
       <Col xs="12" md="6">
         <h1>109 Transfer</h1>
         <FormRow label="出発駅">
@@ -93,11 +100,21 @@ export default function Main({
         <Button onClick={search}>検索</Button>
       </Col>
       <Col xs="12" md="6">
-        所要時間：{cost}分
-        {route?.map((stationId) => {
-          const station = stations[stationId];
-          return <div key={station.id + 1}>{station.name}</div>;
-        })}
+        {cost && route && (
+          <>
+            所要時間：{cost}分
+            <ListGroup>
+              {route?.map((stationId) => {
+                const station = stations[stationId];
+                return (
+                  <ListGroup.Item key={station.id + 1}>
+                    {station.name}
+                  </ListGroup.Item>
+                );
+              })}
+            </ListGroup>
+          </>
+        )}
       </Col>
     </Row>
   );
