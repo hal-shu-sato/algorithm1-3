@@ -66,7 +66,11 @@ export default function Main({
   const [route, setRoute] = useState<number[]>();
 
   const search = useCallback(() => {
-    if (origin.length === 0 || destination.length === 0) return;
+    if (origin.length === 0 || destination.length === 0) {
+      setCost(undefined);
+      setRoute(undefined);
+      return;
+    }
     const originStation = origin[0] as StationInfo;
     const destinationStation = destination[0] as StationInfo;
     const { cost, route } = dijkstra(
@@ -95,6 +99,7 @@ export default function Main({
             onChange={setOrigin}
             selected={origin}
             id="origin"
+            isValid={origin.length > 0}
             {...typeaheadProps}
           />
         </FormRow>
@@ -103,6 +108,7 @@ export default function Main({
             onChange={setDestination}
             selected={destination}
             id="destination"
+            isValid={destination.length > 0}
             {...typeaheadProps}
           />
         </FormRow>
