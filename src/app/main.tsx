@@ -47,6 +47,7 @@ function FormRow({
   );
 }
 
+/** 駅情報の型 */
 type StationInfo = {
   id: number;
   name: string;
@@ -65,15 +66,16 @@ export default function Main({
   const [cost, setCost] = useState<number>();
   const [route, setRoute] = useState<number[]>();
 
+  /* 駅情報をコンソールに出力 */
   useEffect(() => {
     const allStationInfos = stations.map((station) => {
       const adj = adjList[station.id];
       return {
-        id: station.id + 1,
+        id: station.id + 1, // 1-indexに戻す
         name: station.name,
         adjList: adj.map(({ to, time }) => {
           return {
-            id: to + 1,
+            id: to + 1, // 1-indexに戻す
             name: stations[to].name,
             time: time,
           };
@@ -83,7 +85,11 @@ export default function Main({
     console.log(allStationInfos);
   }, [adjList, stations]);
 
+  /**
+   * 検索ボタンを押したときの処理
+   */
   const search = useCallback(() => {
+    // 選択されていない場合は表示を消す
     if (origin.length === 0 || destination.length === 0) {
       setCost(undefined);
       setRoute(undefined);
@@ -91,6 +97,7 @@ export default function Main({
     }
     const originStation = origin[0] as StationInfo;
     const destinationStation = destination[0] as StationInfo;
+    // ダイクストラ法を使用
     const { cost, route } = dijkstra(
       adjList,
       originStation.id,
@@ -100,10 +107,12 @@ export default function Main({
       cost,
       route.map((id) => stations[id].name),
     );
+    // 結果をセット
     setCost(cost);
     setRoute(route);
   }, [adjList, origin, destination, stations]);
 
+  // Typeaheadの共通props
   const typeaheadProps: TypeaheadComponentProps = {
     labelKey: 'name',
     options: stations,
@@ -138,6 +147,7 @@ export default function Main({
         <Button onClick={search}>検索</Button>
       </Col>
       <Col xs="12" md="6">
+        {/* costとrouteが存在するときは表示 */}
         {cost && route && (
           <>
             総所要時間: {cost}分
