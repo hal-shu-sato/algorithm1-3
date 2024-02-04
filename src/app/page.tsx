@@ -29,8 +29,8 @@ async function getStations() {
 }
 
 async function getAdjList() {
-  const stationsTxt = await readFile('109files/adjlist.txt', 'utf8');
-  const lines = stationsTxt.trim().split(/\r\n|\n|\r/);
+  const adjlistTxt = await readFile('109files/adjlist.txt', 'utf8');
+  const lines = adjlistTxt.trim().split(/\r\n|\n|\r/);
   const adjList = lines.map((line) => {
     const adj = line.trim().split(' ').slice(1);
     return adj.map((s) => {
