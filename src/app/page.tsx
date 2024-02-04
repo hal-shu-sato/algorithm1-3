@@ -65,7 +65,7 @@ export default async function Home() {
               {stations.map((station) => {
                 return (
                   <ListGroupItem key={station.id}>
-                    <div className="fw-bold"> {station.name}</div>
+                    <div className="fw-bold">{station.name}</div>
                     <Stack direction="horizontal" gap={2}>
                       {adjList[station.id].map(({ to, time }) => (
                         <Badge key={`${to}-${time}`}>
