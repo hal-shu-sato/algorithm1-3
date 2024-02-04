@@ -88,6 +88,7 @@ export default function Main({
     emptyLabel: '該当する駅が見つかりませんでした。',
     paginationText: 'もっと見る',
     maxResults: 101,
+    clearButton: true,
   };
 
   return (
