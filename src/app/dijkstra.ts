@@ -30,13 +30,12 @@ export default function dijkstra(
     if (target === goal) break;
 
     nodes[target].visited = true;
-    for (let neighbor = 0; neighbor < size; neighbor++) {
-      const totalTime =
-        nodes[target].minTime +
-        (adjList[target].find((v) => v.to === neighbor)?.time ?? Infinity);
-      if (totalTime < nodes[neighbor].minTime) {
-        nodes[neighbor].minTime = totalTime;
-        nodes[neighbor].prev = target;
+    for (const { to, time } of adjList[target]) {
+      if (nodes[to].visited) continue;
+      const totalTime = nodes[target].minTime + time;
+      if (totalTime < nodes[to].minTime) {
+        nodes[to].minTime = totalTime;
+        nodes[to].prev = target;
       }
     }
   }
