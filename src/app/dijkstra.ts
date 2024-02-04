@@ -18,7 +18,7 @@ export default function dijkstra(
   nodes[start].minTime = 0;
   for (;;) {
     let minTime = Infinity;
-    let target: number = Infinity;
+    let target = Infinity;
     for (let i = 0; i < size; i++) {
       if (!nodes[i].visited && nodes[i].minTime < minTime) {
         target = i;
