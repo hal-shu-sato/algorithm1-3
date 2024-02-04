@@ -142,7 +142,7 @@ export default function Main({
           <>
             総所要時間: {cost}分
             <ListGroup>
-              {route?.map((stationId) => {
+              {route.map((stationId) => {
                 const station = stations[stationId];
                 return (
                   <ListGroup.Item key={station.id + 1}>

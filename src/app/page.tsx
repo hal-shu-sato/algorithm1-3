@@ -60,9 +60,9 @@ export default async function Home() {
                   <ListGroupItem key={station.id}>
                     <div className="fw-bold"> {station.name}</div>
                     <Stack direction="horizontal" gap={2}>
-                      {adjList[station.id]?.map(({ to, time }) => (
+                      {adjList[station.id].map(({ to, time }) => (
                         <Badge key={`${to}-${time}`}>
-                          {stations[to]?.name}: {time}分
+                          {stations[to].name}: {time}分
                         </Badge>
                       ))}
                     </Stack>
