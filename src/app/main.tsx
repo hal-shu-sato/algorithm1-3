@@ -10,7 +10,10 @@ import {
   Row,
   type FormGroupProps,
 } from 'react-bootstrap';
-import { Typeahead } from 'react-bootstrap-typeahead';
+import {
+  Typeahead,
+  type TypeaheadComponentProps,
+} from 'react-bootstrap-typeahead';
 import { type Option } from 'react-bootstrap-typeahead/types/types';
 
 import dijkstra, { type AdjList } from './dijkstra';
@@ -75,26 +78,32 @@ export default function Main({
     setRoute(route);
   }, [adjList, origin, destination]);
 
+  const typeaheadProps: TypeaheadComponentProps = {
+    labelKey: 'name',
+    options: stations,
+    emptyLabel: '該当する駅が見つかりませんでした。',
+    paginationText: 'もっと見る',
+    maxResults: 101,
+  };
+
   return (
     <Row className="my-2">
       <Col xs="12" md="6">
         <h1>109 Transfer</h1>
         <FormRow label="出発駅">
           <Typeahead
-            labelKey="name"
             onChange={setOrigin}
-            options={stations}
             selected={origin}
             id="origin"
+            {...typeaheadProps}
           />
         </FormRow>
         <FormRow label="到着駅">
           <Typeahead
-            labelKey="name"
             onChange={setDestination}
-            options={stations}
             selected={destination}
             id="destination"
+            {...typeaheadProps}
           />
         </FormRow>
         <Button onClick={search}>検索</Button>
