@@ -118,7 +118,7 @@ export default function Main({
       <Col xs="12" md="6">
         {cost && route && (
           <>
-            所要時間：{cost}分
+            総所要時間: {cost}分
             <ListGroup>
               {route?.map((stationId) => {
                 const station = stations[stationId];
