@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   Button,
@@ -65,6 +65,24 @@ export default function Main({
   const [cost, setCost] = useState<number>();
   const [route, setRoute] = useState<number[]>();
 
+  useEffect(() => {
+    const allStationInfos = stations.map((station) => {
+      const adj = adjList[station.id];
+      return {
+        id: station.id + 1,
+        name: station.name,
+        adjList: adj.map(({ to, time }) => {
+          return {
+            id: to + 1,
+            name: stations[to].name,
+            time: time,
+          };
+        }),
+      };
+    });
+    console.log(allStationInfos);
+  }, [adjList, stations]);
+
   const search = useCallback(() => {
     if (origin.length === 0 || destination.length === 0) {
       setCost(undefined);
@@ -78,9 +96,13 @@ export default function Main({
       originStation.id,
       destinationStation.id,
     );
+    console.log(
+      cost,
+      route.map((id) => stations[id].name),
+    );
     setCost(cost);
     setRoute(route);
-  }, [adjList, origin, destination]);
+  }, [adjList, origin, destination, stations]);
 
   const typeaheadProps: TypeaheadComponentProps = {
     labelKey: 'name',
