@@ -6,9 +6,9 @@ import {
   Button,
   Col,
   Form,
+  type FormGroupProps,
   ListGroup,
   Row,
-  type FormGroupProps,
 } from 'react-bootstrap';
 import {
   Typeahead,

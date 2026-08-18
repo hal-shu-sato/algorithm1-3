@@ -11,10 +11,10 @@ import {
   ListGroupItem,
   Stack,
 } from 'react-bootstrap';
+import 'react-bootstrap-typeahead/css/Typeahead.bs5.css';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import Main from './main';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import 'react-bootstrap-typeahead/css/Typeahead.bs5.css';
 import styles from './page.module.css';
 
 /**
